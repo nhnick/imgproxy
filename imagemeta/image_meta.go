@@ -2,6 +2,7 @@ package imagemeta
 
 import (
 	"bufio"
+	"bytes"
 	"errors"
 	"io"
 	"sync"
@@ -88,8 +89,21 @@ func DecodeMeta(r io.Reader) (Meta, error) {
 		}
 	}
 
-	if ok, err := IsSVG(rr); err != nil {
-		return nil, err
+	var buf bytes.Buffer
+	tee := io.TeeReader(rr, &buf)
+
+	if f, err := Parse(tee); err != nil {
+		// return nil, err
+	} else {
+		width, height, err := f.FrameSize()
+		if err != nil {
+			return nil, err
+		}
+		return &meta{format: "mp4", width: width, height: height}, nil
+	}
+
+	if ok, err := IsSVG(io.MultiReader(&buf, rr)); err != nil {
+
 	} else if ok {
 		return &meta{format: "svg", width: 1, height: 1}, nil
 	}

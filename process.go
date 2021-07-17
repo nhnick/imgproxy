@@ -20,7 +20,7 @@ const (
 var errConvertingNonSvgToSvg = newError(422, "Converting non-SVG images to SVG is not supported", "Converting non-SVG images to SVG is not supported")
 
 func imageTypeLoadSupport(imgtype imageType) bool {
-	return imgtype == imageTypeSVG ||
+	return imgtype == imageTypeSVG || imgtype == imageTypeMP4 ||
 		imgtype == imageTypeICO ||
 		vipsTypeSupportLoad[imgtype]
 }
@@ -851,10 +851,13 @@ func processImage(ctx context.Context) ([]byte, context.CancelFunc, error) {
 		return nil, func() {}, err
 	}
 
-	if animationSupport && img.IsAnimated() {
-		if err := transformAnimated(ctx, img, imgdata.Data, po, imgdata.Type); err != nil {
-			return nil, func() {}, err
+	if img.IsAnimated() {
+		if animationSupport {
+			if err := transformAnimated(ctx, img, imgdata.Data, po, imgdata.Type); err != nil {
+				return nil, func() {}, err
+			}
 		}
+		return imgdata.Data, func() {}, nil
 	} else {
 		if err := transformImage(ctx, img, imgdata.Data, po, imgdata.Type); err != nil {
 			return nil, func() {}, err

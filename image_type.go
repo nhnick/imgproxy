@@ -1,7 +1,7 @@
 package main
 
 /*
-#cgo LDFLAGS: -s -w
+//#cgo LDFLAGS: -s -w
 #include "vips.h"
 */
 import "C"
@@ -27,6 +27,7 @@ const (
 	imageTypeAVIF    = imageType(C.AVIF)
 	imageTypeBMP     = imageType(C.BMP)
 	imageTypeTIFF    = imageType(C.TIFF)
+	imageTypeMP4     = imageType(C.MP4)
 
 	contentDispositionFilenameFallback = "image"
 )
@@ -44,6 +45,7 @@ var (
 		"avif": imageTypeAVIF,
 		"bmp":  imageTypeBMP,
 		"tiff": imageTypeTIFF,
+		"mp4":  imageTypeMP4,
 	}
 
 	mimes = map[imageType]string{

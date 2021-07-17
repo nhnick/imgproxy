@@ -15,7 +15,8 @@ enum ImgproxyImageTypes {
   HEIC,
   AVIF,
   BMP,
-  TIFF
+  TIFF,
+  MP4
 };
 
 int vips_initialize();
