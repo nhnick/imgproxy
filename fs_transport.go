@@ -37,11 +37,16 @@ func (z ZipFile) Close() error {
 
 func (t fsTransport) RoundTrip(req *http.Request) (resp *http.Response, err error) {
 	path := req.URL.Query().Get("path")
+	sourceAlias := req.URL.Query().Get("source")
+	sourceDir := t.fs
+	if dirPath, ok := MediaSources[sourceAlias]; ok {
+		sourceDir = http.Dir(dirPath)
+	}
 	var f io.ReadCloser
 	var length int64
 	var zf *zip.ReadCloser
 	if len(path) > 0 && strings.HasSuffix(req.URL.Path, ".zip") {
-		zf, err = zip.OpenReader(string(t.fs) + req.URL.Path)
+		zf, err = zip.OpenReader(string(sourceDir) + req.URL.Path)
 		if err != nil {
 			return nil, err
 		}
@@ -57,7 +62,7 @@ func (t fsTransport) RoundTrip(req *http.Request) (resp *http.Response, err erro
 			}
 		}
 	} else {
-		ff, err := t.fs.Open(req.URL.Path)
+		ff, err := sourceDir.Open(req.URL.Path)
 
 		if err != nil {
 			return nil, err

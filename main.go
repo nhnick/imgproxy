@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"log"
 	"os"
 	"os/signal"
@@ -77,6 +79,31 @@ func run() error {
 	if prometheusEnabled {
 		if err := startPrometheusServer(cancel); err != nil {
 			return err
+		}
+	}
+
+	db, err := pgxpool.Connect(context.Background(), os.Getenv("IMGPROXY_DATABASE_URL"))
+	if err != nil {
+		cancel()
+		return err
+	}
+	rows, err := db.Query(context.Background(), "SELECT alias, source_dir as sourceDir FROM media_source")
+	if err != nil {
+		cancel()
+		return err
+	}
+	defer db.Close()
+
+	for rows.Next() {
+		var alias string
+		var sourceDir sql.NullString
+		err = rows.Scan(&alias, &sourceDir)
+		if err != nil {
+			cancel()
+			return err
+		}
+		if sourceDir.Valid {
+			MediaSources[alias] = sourceDir.String
 		}
 	}
 
