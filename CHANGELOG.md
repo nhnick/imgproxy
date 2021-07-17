@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [2.16.6] - 2021-07-08
+### Fix
+- Fix performance regression in ICC profile handling.
+- Fix crashes while processing CMYK images without ICC profile.
+
 ## [2.16.5] - 2021-06-28
 ### Change
 - More clear downloading errors.
