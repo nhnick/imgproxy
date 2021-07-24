@@ -8,6 +8,7 @@ require (
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/airbrake/gobrake/v5 v5.0.3
 	github.com/aws/aws-sdk-go v1.38.65
+	github.com/bakape/thumbnailer v1.0.0 // indirect
 	github.com/benesch/cgosymbolizer v0.0.0-20190515212042-bec6fe6e597b
 	github.com/bugsnag/bugsnag-go/v2 v2.1.1
 	github.com/getsentry/sentry-go v0.11.0

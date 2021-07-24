@@ -62,6 +62,7 @@ var (
 	}
 
 	contentDispositionsFmt = map[imageType]string{
+		imageTypeMP4:  "inline; filename=\"%s.mp4\"",
 		imageTypeJPEG: "inline; filename=\"%s.jpg\"",
 		imageTypePNG:  "inline; filename=\"%s.png\"",
 		imageTypeWEBP: "inline; filename=\"%s.webp\"",

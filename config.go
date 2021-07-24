@@ -322,7 +322,7 @@ var conf = config{
 	DownloadTimeout:                5,
 	Concurrency:                    runtime.NumCPU() * 2,
 	TTL:                            3600,
-	MaxSrcResolution:               16800000,
+	MaxSrcResolution:               168000000,
 	MaxAnimationFrames:             1,
 	MaxSvgCheckBytes:               32 * 1024,
 	SignatureSize:                  32,

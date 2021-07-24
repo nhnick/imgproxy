@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/bakape/thumbnailer"
 	"math"
 	"runtime"
 
@@ -794,6 +795,19 @@ func processImage(ctx context.Context) ([]byte, context.CancelFunc, error) {
 		po.Format = imageTypeAVIF
 	case po.EnforceWebP && canSwitchFormat(imgdata.Type, po.Format, imageTypeWEBP):
 		po.Format = imageTypeWEBP
+	}
+
+	if po.Format != imageTypeMP4 && imgdata.Type == imageTypeMP4 {
+		thumbnailDimensions := thumbnailer.Dims{Width: uint(po.Width), Height: uint(po.Height)}
+
+		thumbnailOptions := thumbnailer.Options{JPEGQuality: uint8(po.Quality), MaxSourceDims: thumbnailer.Dims{}, ThumbDims: thumbnailDimensions, AcceptedMimeTypes: nil}
+
+		_, thumbnail, err := thumbnailer.ProcessBuffer(imgdata.Data, thumbnailOptions)
+		if err != nil {
+			return nil, func() {}, err
+		}
+		imageBytes := thumbnail.Image.Data
+		return imageBytes, func() {}, nil
 	}
 
 	if po.Format == imageTypeSVG {
