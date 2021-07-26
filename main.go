@@ -87,7 +87,7 @@ func run() error {
 		cancel()
 		return err
 	}
-	rows, err := db.Query(context.Background(), "SELECT alias, source_dir as sourceDir FROM media_source")
+	rows, err := db.Query(context.Background(), "SELECT id, source_dir as sourceDir FROM media_source")
 	if err != nil {
 		cancel()
 		return err
@@ -95,7 +95,7 @@ func run() error {
 	defer db.Close()
 
 	for rows.Next() {
-		var alias string
+		var alias int
 		var sourceDir sql.NullString
 		err = rows.Scan(&alias, &sourceDir)
 		if err != nil {

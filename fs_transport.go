@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -37,10 +38,13 @@ func (z ZipFile) Close() error {
 
 func (t fsTransport) RoundTrip(req *http.Request) (resp *http.Response, err error) {
 	path := req.URL.Query().Get("path")
-	sourceAlias := req.URL.Query().Get("source")
+	source := req.URL.Query().Get("source")
 	sourceDir := t.fs
-	if dirPath, ok := MediaSources[sourceAlias]; ok {
-		sourceDir = http.Dir(dirPath)
+	sourceId, err := strconv.Atoi(source)
+	if err == nil {
+		if dirPath, ok := MediaSources[sourceId]; ok {
+			sourceDir = http.Dir(dirPath)
+		}
 	}
 	var f io.ReadCloser
 	var length int64

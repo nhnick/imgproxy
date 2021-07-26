@@ -1,3 +1,3 @@
 package main
 
-var MediaSources = make(map[string]string)
+var MediaSources = make(map[int]string)
