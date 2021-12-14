@@ -147,6 +147,8 @@ func SupportsLoad(it imagetype.Type) bool {
 		sup = hasOperation("heifload_buffer")
 	case imagetype.TIFF:
 		sup = hasOperation("tiffload_buffer")
+	case imagetype.MP4:
+		sup = true
 	}
 
 	typeSupportLoad.Store(it, sup)

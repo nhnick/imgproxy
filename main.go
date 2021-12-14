@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	"flag"
 	"database/sql"
+	"flag"
 	"fmt"
+	"github.com/imgproxy/imgproxy/v3/media_source"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -119,7 +119,7 @@ func run() error {
 			return err
 		}
 		if sourceDir.Valid {
-			MediaSources[alias] = sourceDir.String
+			media_source.MediaSources[alias] = sourceDir.String
 		}
 	}
 

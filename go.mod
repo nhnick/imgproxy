@@ -9,6 +9,7 @@ require (
 	github.com/StackExchange/wmi v1.2.1 // indirect
 	github.com/airbrake/gobrake/v5 v5.1.1
 	github.com/aws/aws-sdk-go v1.42.20
+	github.com/bakape/thumbnailer/v2 v2.7.0
 	github.com/benesch/cgosymbolizer v0.0.0-20190515212042-bec6fe6e597b
 	github.com/bugsnag/bugsnag-go/v2 v2.1.2
 	github.com/getsentry/sentry-go v0.11.0
@@ -18,6 +19,7 @@ require (
 	github.com/jackc/pgx/v4 v4.12.0
 	github.com/matoous/go-nanoid/v2 v2.0.0
 	github.com/newrelic/go-agent/v3 v3.15.2
+	github.com/nwaples/rardecode v1.1.2 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/philhofer/fwd v1.1.1 // indirect
 	github.com/prometheus/client_golang v1.11.0

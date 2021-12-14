@@ -170,7 +170,7 @@ func Reset() {
 
 	PathPrefix = ""
 
-	MaxSrcResolution = 16800000
+	MaxSrcResolution = 168000000
 	MaxSrcFileSize = 0
 	MaxAnimationFrames = 1
 	MaxSvgCheckBytes = 32 * 1024

@@ -1,13 +1,10 @@
 package processing
 
 import (
+	"bytes"
 	"context"
 	"fmt"
-	"runtime"
-	"strconv"
-
-	log "github.com/sirupsen/logrus"
-
+	thumbnailer "github.com/bakape/thumbnailer/v2"
 	"github.com/imgproxy/imgproxy/v3/config"
 	"github.com/imgproxy/imgproxy/v3/imagedata"
 	"github.com/imgproxy/imgproxy/v3/imagetype"
@@ -16,6 +13,10 @@ import (
 	"github.com/imgproxy/imgproxy/v3/router"
 	"github.com/imgproxy/imgproxy/v3/security"
 	"github.com/imgproxy/imgproxy/v3/vips"
+	log "github.com/sirupsen/logrus"
+	"image/png"
+	"runtime"
+	"strconv"
 )
 
 var mainPipeline = pipeline{
@@ -223,7 +224,21 @@ func ProcessImage(ctx context.Context, imgdata *imagedata.ImageData, po *options
 	case po.EnforceWebP && canSwitchFormat(imgdata.Type, po.Format, imagetype.WEBP):
 		po.Format = imagetype.WEBP
 	}
+	if po.Format != imagetype.MP4 && imgdata.Type == imagetype.MP4 {
+		thumbnailDimensions := thumbnailer.Dims{Width: uint(po.Width), Height: uint(po.Height)}
 
+		thumbnailOptions := thumbnailer.Options{MaxSourceDims: thumbnailer.Dims{}, ThumbDims: thumbnailDimensions, AcceptedMimeTypes: nil}
+		readerBuf := bytes.NewReader(imgdata.Data)
+		_, thumbnail, err := thumbnailer.Process(readerBuf, thumbnailOptions)
+		if err != nil {
+			return nil, err
+		}
+		buf := new(bytes.Buffer)
+		err = png.Encode(buf, thumbnail)
+		imgdata.Data = buf.Bytes()
+		imgdata.Type = imagetype.PNG
+		return imgdata, nil
+	}
 	if !vips.SupportsSave(po.Format) {
 		return nil, fmt.Errorf("Can't save %s, probably not supported by your libvips", po.Format)
 	}
@@ -244,10 +259,13 @@ func ProcessImage(ctx context.Context, imgdata *imagedata.ImageData, po *options
 
 	originWidth, originHeight := getImageSize(img)
 
-	if animationSupport && img.IsAnimated() {
-		if err := transformAnimated(ctx, img, po, imgdata); err != nil {
-			return nil, err
+	if img.IsAnimated() {
+		if animationSupport {
+			if err := transformAnimated(ctx, img, po, imgdata); err != nil {
+				return nil, err
+			}
 		}
+		return imgdata, nil
 	} else {
 		if err := mainPipeline.Run(ctx, img, po, imgdata); err != nil {
 			return nil, err

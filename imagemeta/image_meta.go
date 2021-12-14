@@ -101,7 +101,7 @@ func DecodeMeta(r io.Reader) (Meta, error) {
 		if err != nil {
 			return nil, err
 		}
-		return &meta{format: "mp4", width: width, height: height}, nil
+		return &meta{format: imagetype.MP4, width: width, height: height}, nil
 	}
 
 	if ok, err := IsSVG(io.MultiReader(&buf, rr)); err != nil {

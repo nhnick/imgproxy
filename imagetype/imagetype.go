@@ -21,6 +21,7 @@ const (
 	AVIF
 	BMP
 	TIFF
+	MP4
 )
 
 const contentDispositionFilenameFallback = "image"
@@ -38,6 +39,7 @@ var (
 		"avif": AVIF,
 		"bmp":  BMP,
 		"tiff": TIFF,
+		"mp4":  MP4,
 	}
 
 	mimes = map[Type]string{
@@ -54,6 +56,7 @@ var (
 	}
 
 	contentDispositionsFmt = map[Type]string{
+		MP4:  "inline; filename=\"%s.mp4\"",
 		JPEG: "inline; filename=\"%s.jpg\"",
 		PNG:  "inline; filename=\"%s.png\"",
 		WEBP: "inline; filename=\"%s.webp\"",
