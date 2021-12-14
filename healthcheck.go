@@ -7,14 +7,19 @@ import (
 	"net"
 	"net/http"
 	"os"
+
+	"github.com/imgproxy/imgproxy/v3/config"
+	"github.com/imgproxy/imgproxy/v3/config/configurators"
 )
 
 func healthcheck() int {
-	network := conf.Network
-	bind := conf.Bind
+	network := config.Network
+	bind := config.Bind
+	pathprefix := config.PathPrefix
 
-	strEnvConfig(&network, "IMGPROXY_NETWORK")
-	strEnvConfig(&bind, "IMGPROXY_BIND")
+	configurators.String(&network, "IMGPROXY_NETWORK")
+	configurators.String(&bind, "IMGPROXY_BIND")
+	configurators.String(&pathprefix, "IMGPROXY_PATH_PREFIX")
 
 	httpc := http.Client{
 		Transport: &http.Transport{
@@ -24,7 +29,7 @@ func healthcheck() int {
 		},
 	}
 
-	res, err := httpc.Get("http://imgproxy/health")
+	res, err := httpc.Get(fmt.Sprintf("http://imgproxy%s/health", pathprefix))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		return 1
