@@ -27,7 +27,7 @@ func imageTypeLoadSupport(imgtype imageType) bool {
 }
 
 func imageTypeSaveSupport(imgtype imageType) bool {
-	return imgtype == imageTypeSVG || vipsTypeSupportSave[imgtype]
+	return imgtype == imageTypeSVG || imgtype == imageTypeMP4 || vipsTypeSupportSave[imgtype]
 }
 
 func imageTypeGoodForWeb(imgtype imageType) bool {
