@@ -2,6 +2,124 @@
 
 ## [Unreleased]
 
+## [3.1.1] - 2021-12-10
+### Fix
+- Fix crashes in some scenarios.
+
+## [3.1.0] - 2021-12-08
+### Added
+- Add `IMGPROXY_ETAG_BUSTER` config.
+- (pro) [watermark_text](https://docs.imgproxy.net/generating_the_url?id=watermark-text) processing option.
+
+### Change
+- Improved ICC profiles handling.
+- Proper error message when the deprecated basic URL format is used.
+- Watermark offsets can be applied to replicated watermarks.
+
+### Fix
+- (pro) Fix parsing metadata of extended sequential JPEGs.
+
+## [3.0.0] - 2021-11-23
+### Added
+- (pro) [Autoquality](https://docs.imgproxy.net/autoquality).
+- (pro) [Object detection](https://docs.imgproxy.net/object_detection): `obj` [gravity](https://docs.imgproxy.net/generating_the_url?id=gravity) type, [blur_detections](https://docs.imgproxy.net/generating_the_url?id=blur-detections) processing option, [draw_detections](https://docs.imgproxy.net/generating_the_url?id=draw-detections) processing option.
+- (pro) [Chained pipelines](https://docs.imgproxy.net/chained_pipelines)
+- `IMGPROXY_FALLBACK_IMAGE_HTTP_CODE` config.
+- (pro) [fallback_image_url](https://docs.imgproxy.net/generating_the_url?id=fallback-image-url) processing option.
+- [expires](https://docs.imgproxy.net/generating_the_url?id=expires) processing option.
+- [skip processing](https://docs.imgproxy.net/generating_the_url?id=skip-processing) processing option.
+- [Datadog](./docs/datadog.md) metrics.
+- `force` and `fill-down` resizing types.
+- [min-width](https://docs.imgproxy.net/generating_the_url?id=min-width) and [min-height](https://docs.imgproxy.net/generating_the_url?id=min-height) processing options.
+- [format_quality](https://docs.imgproxy.net/generating_the_url?id=format-quality) processing option.
+- Add `X-Origin-Width` and `X-Origin-Height` to debug headers.
+- Add `IMGPROXY_COOKIE_PASSTHROUGH` and `IMGPROXY_COOKIE_BASE_URL` configs.
+- Add `client_ip` to requests and responses logs.
+
+### Change
+- ETag generator & checker uses source image ETag when possible.
+- `304 Not Modified` responses includes `Cache-Control`, `Expires`, and `Vary` headers.
+- `dpr` processing option doesn't enlarge image unless `enlarge` is true.
+- imgproxy responds with `500` HTTP code when the source image downloading error seems temporary (timeout, server error, etc).
+- When `IMGPROXY_FALLBACK_IMAGE_HTTP_CODE` is zero, imgproxy responds with the usual HTTP code.
+- BMP support doesn't require ImageMagick.
+- Save GIFs without ImageMagick (vips 8.12+ required).
+
+### Fix
+- Fix Client Hints behavior. `Width` is physical size, so we should divide it by `DPR` value.
+- Fix scale-on-load in some rare cases.
+- Fix the default Sentry release name.
+- Fix the `health` command when the path prefix is set.
+- Escape double quotes in content disposition.
+
+### Removed
+- Removed basic URL format, use [advanced one](./docs/generating_the_url.md) instead.
+- Removed `IMGPROXY_MAX_SRC_DIMENSION` config, use `IMGPROXY_MAX_SRC_RESOLUTION` instead.
+- Removed `IMGPROXY_GZIP_COMPRESSION` config.
+- Removed `IMGPROXY_MAX_GIF_FRAMES` config, use `IMGPROXY_MAX_ANIMATION_FRAMES` instead.
+- Removed `crop` resizing type, use [crop](./docs/generating_the_url.md#crop) processing option instead.
+- Dropped old libvips (<8.10) support.
+- (pro) Removed advanced GIF optimizations. All optimizations are applied by default ib both OSS and Pro versions.
+
+## [3.0.0.beta2] - 2021-11-15
+### Added
+- Add `X-Origin-Width` and `X-Origin-Height` to debug headers.
+- Add `IMGPROXY_COOKIE_PASSTHROUGH` and `IMGPROXY_COOKIE_BASE_URL` configs.
+
+### Change
+- `dpr` processing option doesn't enlarge image unless `enlarge` is true.
+- `304 Not Modified` responses includes `Cache-Control`, `Expires`, and `Vary` headers.
+- imgproxy responds with `500` HTTP code when the source image downloading error seems temporary (timeout, server error, etc).
+- When `IMGPROXY_FALLBACK_IMAGE_HTTP_CODE` is zero, imgproxy responds with the usual HTTP code.
+- BMP support doesn't require ImageMagick.
+
+### Fix
+- Fix Client Hints behavior. `Width` is physical size, so we should divide it by `DPR` value.
+- Fix scale-on-load in some rare cases.
+- Fix `requests_total` counter in Prometheus.
+
+## [3.0.0.beta1] - 2021-10-01
+### Added
+- (pro) [Autoquality](https://docs.imgproxy.net/autoquality).
+- (pro) [Object detection](https://docs.imgproxy.net/object_detection): `obj` [gravity](https://docs.imgproxy.net/generating_the_url?id=gravity) type, [blur_detections](https://docs.imgproxy.net/generating_the_url?id=blur-detections) processing option, [draw_detections](https://docs.imgproxy.net/generating_the_url?id=draw-detections) processing option.
+- (pro) [Chained pipelines](https://docs.imgproxy.net/chained_pipelines)
+- `IMGPROXY_FALLBACK_IMAGE_HTTP_CODE` config.
+- (pro) [fallback_image_url](https://docs.imgproxy.net/generating_the_url?id=fallback-image-url) processing option.
+- [expires](https://docs.imgproxy.net/generating_the_url?id=expires) processing option.
+- [skip processing](https://docs.imgproxy.net/generating_the_url?id=skip-processing) processing option.
+- [Datadog](./docs/datadog.md) metrics.
+- `force` and `fill-down` resizing types.
+- [min-width](https://docs.imgproxy.net/generating_the_url?id=min-width) and [min-height](https://docs.imgproxy.net/generating_the_url?id=min-height) processing options.
+- [format_quality](https://docs.imgproxy.net/generating_the_url?id=format-quality) processing option.
+
+### Change
+- ETag generator & checker uses source image ETag when possible.
+
+### Removed
+- Removed basic URL format, use [advanced one](./docs/generating_the_url.md) instead.
+- Removed `IMGPROXY_MAX_SRC_DIMENSION` config, use `IMGPROXY_MAX_SRC_RESOLUTION` instead.
+- Removed `IMGPROXY_GZIP_COMPRESSION` config.
+- Removed `IMGPROXY_MAX_GIF_FRAMES` config, use `IMGPROXY_MAX_ANIMATION_FRAMES` instead.
+- Removed `crop` resizing type, use [crop](./docs/generating_the_url.md#crop) processing option instead.
+- Dropped old libvips (<8.8) support.
+
+## [2.17.0] - 2021-09-07
+### Added
+- Wildcard support in `IMGPROXY_ALLOWED_SOURCES`.
+
+### Change
+- If the source URL contains the `IMGPROXY_BASE_URL` prefix, it won't be added.
+
+### Fix
+- (pro) Fix path prefix support in the `/info` handler.
+
+### Deprecated
+- The [basic URL format](https://docs.imgproxy.net/generating_the_url_basic) is deprecated and can be removed in future versions. Use [advanced URL format](https://docs.imgproxy.net/generating_the_url_advanced) instead.
+
+## [2.16.7] - 2021-07-20
+### Change
+- Reset DPI while stripping meta.
+
 ## [2.16.6] - 2021-07-08
 ### Fix
 - Fix performance regression in ICC profile handling.
@@ -43,11 +161,11 @@
 ### Added
 - AVIF support.
 - Azure Blob Storage support.
-- `IMGPROXY_STRIP_COLOR_PROFILE` config and [strip_color_profile](https://docs.imgproxy.net/generating_the_url_advanced?id=strip-color-profile) processing option.
+- `IMGPROXY_STRIP_COLOR_PROFILE` config and [strip_color_profile](https://docs.imgproxy.net/generating_the_url?id=strip-color-profile) processing option.
 - `IMGPROXY_FORMAT_QUALITY` config.
-- `IMGPROXY_AUTO_ROTATE` config and [auto_rotate](https://docs.imgproxy.net/generating_the_url_advanced?id=auto-rotate) processing option.
-- [rotate](https://docs.imgproxy.net/generating_the_url_advanced?id=rotate) processing option.
-- `width` and `height` arguments of the [crop](https://docs.imgproxy.net/generating_the_url_advanced?id=crop) processing option can be less than `1` that is treated by imgproxy as a relative value (a.k.a. crop by percentage).
+- `IMGPROXY_AUTO_ROTATE` config and [auto_rotate](https://docs.imgproxy.net/generating_the_url?id=auto-rotate) processing option.
+- [rotate](https://docs.imgproxy.net/generating_the_url?id=rotate) processing option.
+- `width` and `height` arguments of the [crop](https://docs.imgproxy.net/generating_the_url?id=crop) processing option can be less than `1` that is treated by imgproxy as a relative value (a.k.a. crop by percentage).
 - (pro) Remove Adobe Illustrator garbage from SVGs.
 - (pro) Add IPTC tags to the `/info` response.
 
@@ -68,9 +186,9 @@
 ### Added
 - Ability to skip processing of some formats. See [Skip processing](https://docs.imgproxy.net/configuration?id=skip-processing).
 - (pro) PDF support.
-- (pro) [video_thumbnail_second](https://docs.imgproxy.net/generating_the_url_advanced?id=video-thumbnail-second) processing option.
-- (pro) [page](https://docs.imgproxy.net/generating_the_url_advanced?id=page) processing option.
-- (pro) [background_alpha](https://docs.imgproxy.net/generating_the_url_advanced?id=background-alpha) processing option.
+- (pro) [video_thumbnail_second](https://docs.imgproxy.net/generating_the_url?id=video-thumbnail-second) processing option.
+- (pro) [page](https://docs.imgproxy.net/generating_the_url?id=page) processing option.
+- (pro) [background_alpha](https://docs.imgproxy.net/generating_the_url?id=background-alpha) processing option.
 - (pro) `IMGPROXY_VIDEO_THUMBNAIL_PROBE_SIZE` and `IMGPROXY_VIDEO_THUMBNAIL_MAX_ANALYZE_DURATION` configs.
 
 ### Changed
@@ -88,8 +206,8 @@
 ## [2.14.0] - 2020-07-17
 ### Added
 - `IMGPROXY_PROMETHEUS_NAMESPACE` config.
-- [strip_metadata](https://docs.imgproxy.net/generating_the_url_advanced?id=strip-metadata) processing option.
-- (pro) Configurable unsharpening. See [Unsharpening](https://docs.imgproxy.net/configuration?id=unsharpening) configs and [unsharpening](https://docs.imgproxy.net/generating_the_url_advanced?id=unsharpening) processing option.
+- [strip_metadata](https://docs.imgproxy.net/generating_the_url?id=strip-metadata) processing option.
+- (pro) Configurable unsharpening. See [Unsharpening](https://docs.imgproxy.net/configuration?id=unsharpening) configs and [unsharpening](https://docs.imgproxy.net/generating_the_url?id=unsharpening) processing option.
 
 ### Changed
 - Better for libvips memory metrics for Prometheus.
@@ -111,7 +229,7 @@
 ## [2.13.0] - 2020-04-22
 ### Added
 - Fallback images.
-- [padding](https://docs.imgproxy.net/generating_the_url_advanced?id=padding) processing option.
+- [padding](https://docs.imgproxy.net/generating_the_url?id=padding) processing option.
 
 ### Changed
 - Optimized memory usage. Especially when dealing with animated images.
@@ -238,7 +356,7 @@
 ## [2.4.0] - 2019-08-20
 ### Added
 - `SO_REUSEPORT` socker option support. Can be enabled with `IMGPROXY_SO_REUSEPORT`.
-- [filename](./docs/generating_the_url_advanced.md#filename) option.
+- [filename](./docs/generating_the_url.md#filename) option.
 
 ### Changed
 - Better handling if non-sRGB images.
@@ -255,8 +373,8 @@
 - `libvips` v8.8 support: better processing of animated GIFs, built-in CMYK profile, better WebP scale-on-load, etc;
 - Animated WebP support. `IMGPROXY_MAX_GIF_FRAMES` is deprecated, use `IMGPROXY_MAX_ANIMATION_FRAMES`;
 - [HEIC support](./docs/image_formats_support.md#heic-support);
-- [crop](./docs/generating_the_url_advanced.md#crop) processing option. `resizing_type:crop` is deprecated;
-- Offsets for [gravity](./docs/generating_the_url_advanced.md#gravity);
+- [crop](./docs/generating_the_url.md#crop) processing option. `resizing_type:crop` is deprecated;
+- Offsets for [gravity](./docs/generating_the_url.md#gravity);
 - Resizing type `auto`. If both source and resulting dimensions have the same orientation (portrait or landscape), imgproxy will use `fill`. Otherwise, it will use `fit`;
 - Development errors mode. When `IMGPROXY_DEVELOPMENT_ERRORS_MODE` is true, imgproxy will respond with detailed error messages. Not recommended for production because some errors may contain stack trace;
 - `IMGPROXY_KEEP_ALIVE_TIMEOUT` config.
@@ -314,7 +432,7 @@ Fixed processing of images with embedded profiles that was broken in v2.2.8.
 
 ## [2.2.5] - 2019-02-21
 ### Added
-- [extend](./docs/generating_the_url_advanced.md#extend) processing option.
+- [extend](./docs/generating_the_url.md#extend) processing option.
 - `vips_memory_bytes`, `vips_max_memory_bytes` and `vips_allocs` metrics for Prometheus.
 
 ### Fixed
@@ -384,15 +502,15 @@ Fixed processing of images with embedded profiles that was broken in v2.2.8.
 
 ## [2.1.0] - 2018-11-16
 ### Added
-- [Plain source URLs](./docs/generating_the_url_advanced.md#plain) support.
+- [Plain source URLs](./docs/generating_the_url.md#plain) support.
 - [Serving images from Google Cloud Storage](./docs/serving_files_from_google_cloud_storage.md).
 - [Full support of GIFs](./docs/image_formats_support.md#gif-support) including animated ones.
 - [Watermarks](./docs/watermark.md).
 - [New Relic](./docs/new_relic.md) metrics.
 - [Prometheus](./docs/prometheus.md) metrics.
-- [DPR](./docs/generating_the_url_advanced.md#dpr) option (thanks to [selul](https://github.com/selul)).
-- [Cache buster](./docs/generating_the_url_advanced.md#cache-buster) option.
-- [Quality](./docs/generating_the_url_advanced.md#quality) option.
+- [DPR](./docs/generating_the_url.md#dpr) option (thanks to [selul](https://github.com/selul)).
+- [Cache buster](./docs/generating_the_url.md#cache-buster) option.
+- [Quality](./docs/generating_the_url.md#quality) option.
 - Support for custom [Amazon S3](./docs/serving_files_from_s3.md) endpoints.
 - Support for [Amazon S3](./docs/serving_files_from_s3.md) versioning.
 - [Client hints](./docs/configuration.md#client-hints-support) support (thanks to [selul](https://github.com/selul)).
@@ -421,13 +539,13 @@ Fixed processing of images with embedded profiles that was broken in v2.2.8.
 ## [2.0.0] - 2018-10-08
 All-You-Ever-Wanted release! :tada:
 ### Added
-- [New advanced URL format](./docs/generating_the_url_advanced.md). Unleash the full power of imgproxy v2.0.
+- [New advanced URL format](./docs/generating_the_url.md). Unleash the full power of imgproxy v2.0.
 - [Presets](./docs/presets.md). Shorten your urls by reusing processing options.
 - [Serving images from Amazon S3](./docs/serving_files_from_s3.md). Thanks to [@crohr](https://github.com/crohr), now we have a way to serve files from private S3 buckets.
 - [Autoconverting to WebP when supported by browser](./docs/configuration.md#webp-support-detection) (disabled by default). Use WebP as resulting format when browser supports it.
-- [Gaussian blur](./docs/generating_the_url_advanced.md#blur) and [sharpen](./docs/generating_the_url_advanced.md#sharpen) filters. Make your images look better than before.
-- [Focus point gravity](./docs/generating_the_url_advanced.md#gravity). Tell imgproxy what point will be the center of the image.
-- [Background color](./docs/generating_the_url_advanced.md#background). Control the color of background when converting PNG with alpha-channel to JPEG.
+- [Gaussian blur](./docs/generating_the_url.md#blur) and [sharpen](./docs/generating_the_url.md#sharpen) filters. Make your images look better than before.
+- [Focus point gravity](./docs/generating_the_url.md#gravity). Tell imgproxy what point will be the center of the image.
+- [Background color](./docs/generating_the_url.md#background). Control the color of background when converting PNG with alpha-channel to JPEG.
 
 ### Changed
 - Key and salt are not required anymore. When key or salt is not specified, signature checking is disabled.
